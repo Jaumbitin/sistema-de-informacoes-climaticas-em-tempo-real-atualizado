@@ -30,7 +30,7 @@ Pré-requisitos: Certifique-se de ter o JAVA instalado na sua máquina.
 
 Clone o repositório:
 
-git clone https://github.com/Jaumbitin/sistema-de-informacoes-climaticas-atualizado.git
+git clone [https://github.com/Jaumbitin/sistema-de-informacoes-climaticas-atualizado.git](https://github.com/Jaumbitin/sistema-de-informacoes-climaticas-em-tempo-real-atualizado.git)
 cd sistema-de-informacoes-climaticas-atualizado
 
 
