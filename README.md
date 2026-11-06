@@ -38,3 +38,18 @@ Uma chave esteve em um arquivo versionado. Remover o arquivo da versão atual n�
 A aplicação informa chave ausente, cidade vazia, localização não encontrada e falha na consulta. Requisições possuem limites de tempo e mensagens de erro não exibem a URL autenticada.
 
 Desenvolvido por João Victor R.
+
+## Interface gráfica: Clima Agora
+
+Com a variável WEATHER_API_KEY configurada na sessão:
+
+~~~powershell
+javac -encoding UTF-8 -cp json-20230618.jar ProjetoSistemaDeInformacoesClimaticasEmTempoReal.java ClimaDesktop.java
+java -cp '.;json-20230618.jar' ClimaDesktop
+~~~
+
+A janela permite consultar cidades e rever as últimas cinco buscas da sessão. A consulta ocorre em segundo plano. As condições atuais incluem temperatura, sensação térmica, umidade, vento, pressão e horário local da atualização. A chave continua sendo lida apenas da variável de ambiente.
+
+![Clima Agora](docs/images/desktop.png)
+
+Detalhes visuais: [decisões de interface](docs/DESIGN.md).
