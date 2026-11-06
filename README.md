@@ -1,50 +1,40 @@
-🌤️ Sistema de Informações Climáticas em Tempo Real
+# Sistema de Informações Climáticas em Tempo Real
 
-Sistema backend desenvolvido em JAVA para consulta e monitoramento de dados climáticos em tempo real, integrando-se a APIs externas de clima (como a WeatherAPI) para exibir previsões, temperatura, umidade e condições meteorológicas atualizadas.
+Aplicação de terminal em Java que consulta as condições atuais de uma cidade na WeatherAPI. Exibe temperatura, sensação térmica, condição do tempo, umidade, vento, pressão e horário da atualização.
 
-🚀 Sobre o Projeto
+## Tecnologias
 
-Este projeto foi desenvolvido com foco em boas práticas de integração de sistemas, consumo de APIs RESTful e tratamento de dados em tempo real. A aplicação realiza requisições assíncronas/síncronas para buscar informações meteorológicas precisas de qualquer localidade especificada pelo usuário.
+- Java 11 ou superior, com java.net.http.HttpClient.
+- Biblioteca org.json (JAR incluído).
+- WeatherAPI via HTTPS.
 
-✨ Funcionalidades
+## Executar no Windows (PowerShell)
 
-Consulta em Tempo Real: Busca dados atualizados de temperatura, umidade, ventos e condições gerais do clima.
+~~~powershell
+git clone https://github.com/Jaumbitin/sistema-de-informacoes-climaticas-em-tempo-real-atualizado.git
+cd sistema-de-informacoes-climaticas-em-tempo-real-atualizado
+javac -encoding UTF-8 -cp json-20230618.jar ProjetoSistemaDeInformacoesClimaticasEmTempoReal.java
+~~~
 
-Integração com API Externa: Conexão segura e estruturada com provedores de dados meteorológicos (ex: WeatherAPI).
+Obtenha sua chave em https://www.weatherapi.com/ e forneça-a apenas na sessão local. O comando solicita a chave sem mostrá-la na tela nem gravá-la no histórico:
 
-Tratamento de Erros: Validação de entradas do usuário e tratamento de falhas de conexão ou localidades inválidas.
+~~~powershell
+$chaveClima = Read-Host 'Chave WeatherAPI' -AsSecureString
+$env:WEATHER_API_KEY = [System.Net.NetworkCredential]::new('', $chaveClima).Password
+java -Dfile.encoding=UTF-8 -cp '.;json-20230618.jar' ProjetoSistemaDeInformacoesClimaticasEmTempoReal
+Remove-Item Env:WEATHER_API_KEY
+~~~
 
-Arquitetura Modular: Código limpo, organizado em módulos para facilitar manutenção e escalabilidade.
+Digite a cidade quando solicitado. Nenhum arquivo .env é carregado automaticamente.
 
-🛠️ Tecnologias Utilizadas
+## Segurança
 
-Linguagem: JAVA
+A aplicação lê exclusivamente a variável WEATHER_API_KEY. Não coloque chaves no código, em capturas, em commits ou no README. Arquivos locais como api-key.txt e .env são ignorados pelo Git.
 
-Comunicação HTTP: Biblioteca requests
+Uma chave esteve em um arquivo versionado. Remover o arquivo da versão atual não apaga histórico, clones ou cópias: revogue ou regenere a chave no painel da WeatherAPI e use a nova apenas localmente. A alteração do código não revoga a credencial antiga.
 
-Controle de Versão: Git & GitHub
+## Tratamento de falhas
 
-⚙️ Como Executar o Projeto
-
-Pré-requisitos: Certifique-se de ter o JAVA instalado na sua máquina.
-
-Clone o repositório:
-
-git clone [https://github.com/Jaumbitin/sistema-de-informacoes-climaticas-atualizado.git](https://github.com/Jaumbitin/sistema-de-informacoes-climaticas-em-tempo-real-atualizado.git)
-cd sistema-de-informacoes-climaticas-atualizado
-
-
-Instale as dependências:
-
-pip install requests
-
-
-Configure sua chave de API:
-Crie uma conta gratuita em WeatherAPI para obter sua chave de acesso (API Key).
-
-Execute a aplicação:
-Siga as instruções do script principal para inserir a cidade desejada e visualizar as informações climáticas.
-
-👨‍💻 Autor
+A aplicação informa chave ausente, cidade vazia, localização não encontrada e falha na consulta. Requisições possuem limites de tempo e mensagens de erro não exibem a URL autenticada.
 
 Desenvolvido por João Victor R.

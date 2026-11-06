@@ -6,8 +6,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.time.Duration;
 
 public class ProjetoSistemaDeInformacoesClimaticasEmTempoReal {
 
@@ -25,33 +24,50 @@ public class ProjetoSistemaDeInformacoesClimaticasEmTempoReal {
             } else {
                 imprimirDadosClimaticos(dadosClimaticos);
             }
-        } catch (Exception e) {
+        } catch (IllegalStateException e) {
             System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Não foi possível consultar o clima. Verifique a conexão e tente novamente.");
         }
     }
 
     public static String getDadosClimaticos(String cidade) throws Exception {
-        String apiKey = Files.readString( Paths.get("api-key.txt")).trim(); // trim é para tirar o espaço
+        String apiKey = System.getenv("WEATHER_API_KEY");
+        if (apiKey == null || apiKey.isBlank()) {
+            throw new IllegalStateException("Configure a variável de ambiente WEATHER_API_KEY antes de executar.");
+        }
+        if (cidade == null || cidade.isBlank()) {
+            throw new IllegalStateException("Informe o nome de uma cidade.");
+        }
 
         String formataNomeCidade = URLEncoder.encode(cidade, StandardCharsets.UTF_8);
-        String apiUrl = "http://api.weatherapi.com/v1/current.json?key=" + apiKey + "&q=" + formataNomeCidade;
+        String apiUrl = "https://api.weatherapi.com/v1/current.json?key="
+                + URLEncoder.encode(apiKey.trim(), StandardCharsets.UTF_8)
+                + "&q=" + formataNomeCidade + "&lang=pt";
         HttpRequest request = HttpRequest.newBuilder() // Começa a construção de uma nova solicitação HTTP
                 .uri(URI.create(apiUrl)) // Este método define o URI da solicitação HTTP.
+                .timeout(Duration.ofSeconds(20))
                 .build(); // Finaliza a construção da solicitação HTTP.
 
         // Criar objeto enviar solicitações HTTP e receber respostas HTTP, para acessar o site da WeatherAPI
-        HttpClient client = HttpClient.newHttpClient();
+        HttpClient client = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
 
         // Agora vamos enviar requisições HTTP e receber respostas HTTP, comunicar com o site da API Meteorologica.
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            int code = new JSONObject(response.body()).optJSONObject("error") == null ? 0
+                    : new JSONObject(response.body()).getJSONObject("error").optInt("code");
+            if (code == 1006) {
+                throw new IllegalStateException("Localização não encontrada. Por favor, tente novamente.");
+            }
+            throw new IllegalStateException("A API recusou a consulta. Verifique sua chave e o limite de uso.");
+        }
 
         return response.body(); // retorna os dados meteorológicos obtidos no site da API (WeatherAPI)
     }
 
     // Método para imprimir os dados meteorológicos de forma organizada
     public static void imprimirDadosClimaticos(String dados) {
-        System.out.println("Dados originais (JSON) obtidos no site meteorológico: " + dados);
-
         JSONObject dadosJson = new JSONObject(dados);
         JSONObject informacoesMeteorologicas = dadosJson.getJSONObject("current");
 

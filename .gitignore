@@ -1,2 +1,7 @@
 # Project exclude paths
 /out/
+*.class
+api-key.txt
+.env
+.env.*
+!.env.example
