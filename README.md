@@ -2,6 +2,13 @@
 
 Aplicação de terminal em Java que consulta as condições atuais de uma cidade na WeatherAPI. Exibe temperatura, sensação térmica, condição do tempo, umidade, vento, pressão e horário da atualização.
 
+## Navegação
+
+- [Tecnologias](#tecnologias)
+- [Executar no Windows (PowerShell)](#executar-no-windows-powershell)
+- [Segurança](#segurança)
+- [Tratamento de falhas](#tratamento-de-falhas)
+
 ## Tecnologias
 
 - Java 11 ou superior, com java.net.http.HttpClient.
